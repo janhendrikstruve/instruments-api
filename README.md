@@ -12,6 +12,12 @@ Now you are ready to go:
 
 ```shell
 npm install --no-save
+
+npm install cookie-parser
+
+npm install mongodb
+
+npm install dotenv
 ```
 
 This will install the dependencies required to run this project.
