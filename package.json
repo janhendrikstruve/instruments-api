@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/lmachens/api-template#readme",
   "dependencies": {
-    "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
     "mongodb": "^4.1.3"
   },
