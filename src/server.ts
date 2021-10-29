@@ -22,8 +22,15 @@ app.use(express.json());
 const port = 3000;
 
 app.get('/instruments', async (_req, res) => {
-  const allInstruments = await getItemsCollection().find().toArray();
-  res.send(allInstruments);
+  const { name, sound, rating } = _req.query;
+
+  if (!name && !sound && !rating) {
+    // get all elements
+    const allInstruments = await getItemsCollection().find().toArray();
+    res.send(allInstruments);
+  } else {
+    res.send('Queried Objects');
+  }
 });
 
 app.get('/', (_req, res) => {
