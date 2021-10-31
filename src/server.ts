@@ -21,6 +21,19 @@ app.use(cookieParser());
 app.use(express.json());
 const port = 3000;
 
+app.delete('/instruments/:name', async (req, _res) => {
+  const toDelete = req.params.name.split(',');
+  const DB = await getItemsCollection();
+  console.log(toDelete);
+  if (toDelete.length > 1) {
+    console.log('mehrere deletes');
+    await toDelete.forEach((instrument) => DB.deleteOne({ name: instrument }));
+  } else {
+    console.log('ein delete');
+    await DB.deleteOne({ name: toDelete[0] });
+  }
+});
+
 app.get('/instruments', async (_req, res) => {
   const query = _req.query;
   const isEmptyArray =
