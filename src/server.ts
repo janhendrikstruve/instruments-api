@@ -21,6 +21,19 @@ app.use(cookieParser());
 app.use(express.json());
 const port = 3000;
 
+app.post('/instruments', async (req, _res) => {
+  const toCreate = req.body;
+  const DB = await getItemsCollection();
+  console.log(toCreate);
+  if (Array.isArray(toCreate)) {
+    console.log('Array of objects!');
+    DB.insertMany(toCreate);
+  } else {
+    console.log('One object!');
+    DB.insertOne(toCreate);
+  }
+});
+
 app.delete('/instruments/:name', async (req, _res) => {
   const toDelete = req.params.name.split(',');
   const DB = await getItemsCollection();
