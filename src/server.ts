@@ -35,14 +35,38 @@ app.delete('/instruments/:name', async (req, _res) => {
 });
 
 app.get('/instruments', async (_req, res) => {
-  const { name, sound, rating } = _req.query;
+  const query = _req.query;
+  const isEmptyArray =
+    query &&
+    Object.keys(query).length === 0 &&
+    Object.getPrototypeOf(query) === Object.prototype;
 
-  if (!name && !sound && !rating) {
+  if (isEmptyArray) {
     // get all elements
     const allInstruments = await getItemsCollection().find().toArray();
     res.send(allInstruments);
   } else {
-    res.send('Queried Objects');
+    const { name, rating, sound } = query;
+
+    const filters: {
+      name?: string;
+      sounds?: object;
+      rating?: object;
+    } = {};
+
+    if (name) {
+      filters.name = String(name);
+    }
+    if (sound) {
+      filters.sounds = { $in: [sound] };
+    }
+    if (rating) {
+      filters.rating = { $gte: Number(rating) };
+    }
+
+    console.log(filters);
+    const instruments = await getItemsCollection().find(filters).toArray();
+    res.send(instruments);
   }
 });
 

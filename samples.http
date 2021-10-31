@@ -4,3 +4,6 @@ DELETE http://localhost:3000/instruments/Kuhdose HTTP/1.1
 
 //Insert one instrument name you want to delete or more than one, comma seperated
 
+
+### GET a single user
+GET http://localhost:3000/instruments?sound=muh&name=Kuhdose
