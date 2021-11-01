@@ -1,20 +1,20 @@
 
 ### Delete one instrument
-DELETE http://localhost:3000/instruments/Kuhdose HTTP/1.1
+DELETE http://localhost:3000/instruments/Kuhdose3 HTTP/1.1
 
 //Insert one instrument name you want to delete
 
 ### Delete more than one instrument
-DELETE http://localhost:3000/instruments/Kuhdose,Gitarre HTTP/1.1
+DELETE http://localhost:3000/instruments/Kuhdose2,Kuhdose3 HTTP/1.1
 
 //Insert or more than one, comma seperated
 
-### Delete one instrument
+### Post one instrument
 POST http://localhost:3000/instruments HTTP/1.1
 Content-Type: application/json
 
-{
-    "name":"Kuhdose",
+[{
+    "name":"Kuhdose3",
     "sounds":["muh","bums"],
     "inventor":"unbekannt",
     "year":"1955",
@@ -23,9 +23,9 @@ Content-Type: application/json
     "ddr":false,
     "bootcamp":true,
     "image":"https://de.wikipedia.org/wiki/Muhdose#/media/Datei:Meuh_box.JPG"
-}
+}]
 
-//Insert one instrument
+//Insert one instrument Object, nested in an array
 
 ### Post more than one instrument
 POST http://localhost:3000/instruments HTTP/1.1
