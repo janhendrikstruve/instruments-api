@@ -2,12 +2,12 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
-import { connectToDB, getItemsCollection } from './utils/db';
+import { connectToDB, getItemsCollection, checkKeys } from './utils/db';
 
 // instrument = {
 //   name: 'bla',
 //   inventor: 'bla',
-//   inventionYear: 1222,
+//   year: 1222,
 //   bands: [
 //     'band1', 'band2'
 //   ],
@@ -21,17 +21,31 @@ app.use(cookieParser());
 app.use(express.json());
 const port = 3000;
 
+app.post('/instruments', async (req, _res) => {
+  const instruments = req.body;
+  const DB = await getItemsCollection();
+  const keysToCheck = [
+    'name',
+    'inventor',
+    'year',
+    'bands',
+    'rating',
+    'ddr',
+    'bootcamp',
+  ];
+  instruments.forEach((instrument: object) => {
+    if (checkKeys(instrument, keysToCheck)) {
+      DB.insertOne(instrument);
+    }
+  });
+});
+
 app.delete('/instruments/:name', async (req, _res) => {
   const toDelete = req.params.name.split(',');
   const DB = await getItemsCollection();
-  console.log(toDelete);
-  if (toDelete.length > 1) {
-    console.log('mehrere deletes');
-    await toDelete.forEach((instrument) => DB.deleteOne({ name: instrument }));
-  } else {
-    console.log('ein delete');
-    await DB.deleteOne({ name: toDelete[0] });
-  }
+  await toDelete.forEach((instrument) =>
+    console.log(DB.deleteOne({ name: instrument }))
+  );
 });
 
 app.get('/instruments', async (_req, res) => {
@@ -63,8 +77,6 @@ app.get('/instruments', async (_req, res) => {
     if (rating) {
       filters.rating = { $gte: Number(rating) };
     }
-
-    console.log(filters);
     const instruments = await getItemsCollection().find(filters).toArray();
     res.send(instruments);
   }
